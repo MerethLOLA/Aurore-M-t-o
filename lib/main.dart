@@ -1,0 +1,53 @@
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:meteo/screens/home_screen.dart';
+import 'package:meteo/theme/app_theme.dart';
+import 'package:device_preview/device_preview.dart';
+
+import 'package:provider/provider.dart';
+import 'theme/theme_provider.dart';
+
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => ChangeNotifierProvider(
+        create: (_) => ThemeProvider(),
+        child: const WeatherVerseApp(),
+      ),
+    ),
+  );
+
+  // runApp(
+  //   ChangeNotifierProvider(
+  //     create: (_) => ThemeProvider(),
+  //     child: const WeatherVerseApp(),
+  //   ),
+  // );
+}
+
+class WeatherVerseApp extends StatefulWidget {
+  const WeatherVerseApp({super.key});
+
+  @override
+  State<WeatherVerseApp> createState() => _WeatherVerseAppState();
+}
+
+class _WeatherVerseAppState extends State<WeatherVerseApp> {
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
+    return MaterialApp(
+      title: 'WeatherVerse',
+      debugShowCheckedModeBanner: false,
+      themeMode: themeProvider.themeMode,
+      darkTheme: AppTheme.dark(),
+      theme: AppTheme.light(),
+      home: HomeScreen(),
+    );
+  }
+}
