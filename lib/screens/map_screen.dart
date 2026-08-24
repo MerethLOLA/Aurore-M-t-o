@@ -49,7 +49,15 @@ class _MapScreenState extends State<MapScreen> {
             ),
             children: [
               TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                // tile.openstreetmap.org bloque les apps qui ne respectent pas
+                // sa politique d'usage (osm.wiki/Blocked) : on utilise à la
+                // place les fonds de carte CARTO, gratuits et sans clé API,
+                // avec un style clair/sombre qui suit le thème de l'app.
+                urlTemplate: _isDark
+                    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                subdomains: const ['a', 'b', 'c', 'd'],
+                userAgentPackageName: 'com.example.meteo',
               ),
               MarkerLayer(
                 markers: [
