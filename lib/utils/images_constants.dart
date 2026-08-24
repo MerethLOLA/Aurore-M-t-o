@@ -1,9 +1,5 @@
 class ImagesConstants {
-
-  static String imgUri = "assets/img";
-  static String bgHomeDark = "$imgUri/bg_home_dark.jpg";
-  static String bgHomeLight = "$imgUri/bg_home_light.jpg";
-  static String robot = "$imgUri/chatbot.gif";
-  static String weatherLoad = "$imgUri/weather_load.gif";
-  static String globeFlat = "$imgUri/globe_flat.jpg";
+  static const String imgUri = "assets/img";
+  static const String bgHomeDark = "$imgUri/bg_home_dark.jpg";
+  static const String bgHomeLight = "$imgUri/bg_home_light.jpg";
 }

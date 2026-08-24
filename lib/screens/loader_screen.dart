@@ -29,12 +29,18 @@ class _LoaderScreenState extends State<LoaderScreen> {
   String? _errorMessage;
   bool _isDone = false;
 
+  static const List<String> _loadingMessages = [
+    'Nous téléchargeons les données…',
+    "C'est presque fini…",
+    "Plus que quelques secondes avant d'avoir le résultat…",
+  ];
+  int _messageIndex = 0;
+  Timer? _messageTimer;
+
   bool get _isDark => context.read<ThemeProvider>().isDark;
   Color get _accent => AppColors.primaryBlue;
   Color get _textMain => _isDark ? Colors.white : AppColors.slate900;
   Color get _textSub => _isDark ? Colors.white.withOpacity(0.6) : AppColors.subTextOnLight;
-  Color get _cardBg => _isDark ? AppColors.glassDark : AppColors.glassLight;
-  Color get _cardBorder => _isDark ? AppColors.borderDark : AppColors.borderLight;
   bool get _hasError => _errorMessage != null;
 
   @override
@@ -43,14 +49,29 @@ class _LoaderScreenState extends State<LoaderScreen> {
     _startLoading();
   }
 
+  @override
+  void dispose() {
+    _messageTimer?.cancel();
+    super.dispose();
+  }
+
   void _startLoading() {
+    _messageTimer?.cancel();
     setState(() {
       _loadedCities.clear();
       _progress = 0.0;
       _isDone = false;
       _errorMessage = null;
+      _messageIndex = 0;
     });
     WeatherStorage.data = [];
+
+    _messageTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (!mounted) return;
+      setState(() {
+        _messageIndex = (_messageIndex + 1) % _loadingMessages.length;
+      });
+    });
 
     _weatherService.meteoVilleSync(
       onCityLoaded: (city, index) {
@@ -62,6 +83,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
       },
     ).then((allCities) {
       if (!mounted) return;
+      _messageTimer?.cancel();
       WeatherStorage.data = allCities;
       setState(() {
         _progress = 1.0;
@@ -70,6 +92,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
       });
     }).catchError((e) {
       if (!mounted) return;
+      _messageTimer?.cancel();
       setState(() {
         _isDone = true;
         _errorMessage = _friendlyError(e);
@@ -93,7 +116,7 @@ class _LoaderScreenState extends State<LoaderScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'WEATHERVERSE',
+                'AURORE MÉTÉO',
                 style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontWeight: FontWeight.w900,
@@ -106,44 +129,19 @@ class _LoaderScreenState extends State<LoaderScreen> {
               const SizedBox(height: 40),
               if (!_hasError)
                 Text(
-                  _isDone ? "CHARGEMENT TERMINÉ" : "RÉCUPÉRATION DES DONNÉES...",
+                  _isDone ? "CHARGEMENT TERMINÉ" : _loadingMessages[_messageIndex],
                   style: GoogleFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: _textSub,
-                    letterSpacing: 1,
+                    letterSpacing: 0.3,
                   ),
+                  textAlign: TextAlign.center,
                 ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Column(
-      children: [
-        Text(
-          _isDone ? 'CHARGEMENT TERMINÉ' : 'CHARGEMENT EN COURS',
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: _accent,
-            letterSpacing: 1,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          _errorMessage != null
-              ? 'Erreur lors du chargement des villes'
-              : _isDone
-              ? '${_loadedCities.length} villes chargées'
-              : 'Récupération des données météo...',
-          style: GoogleFonts.poppins(fontSize: 16, color: _textSub),
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 
@@ -233,30 +231,6 @@ class _LoaderScreenState extends State<LoaderScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildCityBadges() {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      alignment: WrapAlignment.center,
-      children: _loadedCities.map((city) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: _cardBg,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: _cardBorder),
-        ),
-        child: Text(
-          city.city,
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: _textMain,
-          ),
-        ),
-      )).toList(),
     );
   }
 }

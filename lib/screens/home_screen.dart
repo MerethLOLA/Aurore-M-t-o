@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           SafeArea(
             child: Column(
               children: [
-                _buildStatusBar(),
+                _buildHeader(),
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -110,17 +110,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Column(
                         children: [
-                          const SizedBox(height: 12),
-                          _buildLogo(),
-                          const SizedBox(height: 28),
-                          _buildGlobe(),
-                          const SizedBox(height: 28),
-                          _buildRobotSection(),
+                          const SizedBox(height: 20),
+                          _buildStatsRow(),
                           const SizedBox(height: 32),
-                          navigationButton('LANCER L\'EXPÉRIENCE', LoaderScreen(), animation: _btnGlow),
-                          const SizedBox(height: 24),
-                          _buildStatsCards(),
-                          const SizedBox(height: 30),
+                          _buildGreeting(),
+                          const SizedBox(height: 8),
+                          _buildHero(),
+                          const SizedBox(height: 40),
                         ],
                       ),
                     ),
@@ -134,13 +130,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Barre du haut avec le bouton thème
-  Widget _buildStatusBar() {
+  // En-tête compact : nom de l'app + bouton thème sur une seule ligne
+  Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+      padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          ShaderMask(
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [_accent, _accentPurple],
+            ).createShader(bounds),
+            child: Text(
+              'AURORE MÉTÉO',
+              style: GoogleFonts.playfairDisplay(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+                letterSpacing: 1,
+              ),
+            ),
+          ),
           AnimatedBuilder(
             animation: _glowAnim,
             builder: (context, _) {
@@ -174,189 +185,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
-  // Logo de l'application
-  Widget _buildLogo() {
-    return AnimatedBuilder(
-      animation: _glowAnim,
-      builder: (context, _) {
-        return Column(
-          children: [
-            ShaderMask(
-              shaderCallback: (bounds) => LinearGradient(
-                colors: [_accent, _accentPurple],
-              ).createShader(bounds),
-              child: Text(
-                'WEATHERVERSE',
-                style: GoogleFonts.playfairDisplay(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.white,
-                  letterSpacing: 2,
-                  shadows: [
-                    Shadow(
-                      color: _accent.withOpacity(
-                        _glowAnim.value * (_isDark ? 1.0 : 0.4),
-                      ),
-                      blurRadius: 20,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'MÉTÉO EN DOUCEUR',
-              style: GoogleFonts.poppins(
-                fontSize: 11,
-                color: _textSub,
-                letterSpacing: 5,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Globe stylisé (illustration plate) avec halo lumineux animé
-  Widget _buildGlobe() {
-    return SizedBox(
-      height: 240,
-      child: Center(
-        child: AnimatedBuilder(
-          animation: _glowAnim,
-          builder: (context, _) {
-            return Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: _accent.withOpacity(0.45 * _glowAnim.value),
-                    blurRadius: 50,
-                    spreadRadius: 6,
-                  ),
-                  BoxShadow(
-                    color: _accentPurple.withOpacity(0.2 * _glowAnim.value),
-                    blurRadius: 30,
-                  ),
-                ],
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  ImagesConstants.globeFlat,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  // Robot + bulle de dialogue
-  Widget _buildRobotSection() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        SizedBox(
-          width: 90,
-          height: 108,
-          child: Image.asset(
-            ImagesConstants.robot,
-            fit: BoxFit.contain,
-            filterQuality: FilterQuality.medium,
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              color: _cardBg,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-                bottomLeft: Radius.circular(4),
-              ),
-              border: Border.all(color: _cardBorder),
-              boxShadow: [
-                BoxShadow(
-                  color: _accent.withOpacity(0.08),
-                  blurRadius: 15,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _accentGreen,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'BLOBI',
-                      style: GoogleFonts.poppins(
-                        fontSize: 8,
-                        color: _accentGreen,
-                        letterSpacing: 2,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Bonjour ! Je suis ton ami BLOBI',
-                  style: GoogleFonts.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: _textMain,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Prêt pour la météo? ',
-                  style: GoogleFonts.poppins(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: _textMain,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Je surveille 5 villes pour toi en temps réel !',
-                  style: GoogleFonts.poppins(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: _textSub,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStatsCards() {
+  // Pastilles horizontales de statistiques
+  Widget _buildStatsRow() {
     final stats = [
-      {'icon': '🌍', 'value': '5', 'label': 'VILLES'},
-      {'icon': '⏱️', 'value': '5s', 'label': 'INTERVALLE'},
-      {'icon': '📡', 'value': 'LIVE', 'label': 'DONNÉES'},
+      {'icon': Icons.location_city_rounded, 'value': '5', 'label': 'villes'},
+      {'icon': Icons.timer_outlined, 'value': '5s', 'label': 'intervalle'},
+      {'icon': Icons.podcasts_rounded, 'value': 'LIVE', 'label': 'données'},
     ];
 
     return Row(
@@ -364,42 +198,42 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         final s = stats[i];
         return Expanded(
           child: Container(
-            margin: EdgeInsets.only(
-              left: i == 0 ? 0 : 6,
-              right: i == stats.length - 1 ? 0 : 6,
-            ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            margin: EdgeInsets.only(left: i == 0 ? 0 : 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
               color: _cardBg,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(color: _cardBorder),
-              boxShadow: [
-                BoxShadow(
-                  color: _accentPurple.withOpacity(0.07),
-                  blurRadius: 12,
-                ),
-              ],
             ),
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(s['icon']!, style: const TextStyle(fontSize: 22)),
-                const SizedBox(height: 6),
-                Text(
-                  s['value']!,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: _accent,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  s['label']!,
-                  style: GoogleFonts.poppins(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1.5,
-                    color: _textSub,
+                Icon(s['icon'] as IconData, size: 16, color: _accent),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        s['value'] as String,
+                        style: GoogleFonts.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                          color: _textMain,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        s['label'] as String,
+                        style: GoogleFonts.poppins(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w500,
+                          color: _textSub,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -407,6 +241,128 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         );
       }),
+    );
+  }
+
+  // Message de bienvenue
+  Widget _buildGreeting() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Bonjour ☀️',
+            style: GoogleFonts.playfairDisplay(
+              fontSize: 26,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w700,
+              color: _textMain,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'La météo de 5 villes vous attend, en un instant.',
+            style: GoogleFonts.poppins(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: _textSub,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Carte façon appli météo (grande icône centrale, bandeau de mini-icônes),
+  // et bouton flottant en chevauchement
+  Widget _buildHero() {
+    const miniIcons = [
+      Icons.wb_sunny_outlined,
+      Icons.cloud_outlined,
+      Icons.grain_outlined,
+      Icons.filter_drama_outlined,
+      Icons.nights_stay_outlined,
+    ];
+
+    return Column(
+      children: [
+        AnimatedBuilder(
+          animation: _glowAnim,
+          builder: (context, _) {
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 24),
+              decoration: BoxDecoration(
+                color: _cardBg,
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: _cardBorder),
+                boxShadow: [
+                  BoxShadow(
+                    color: _accent.withOpacity(0.35 * _glowAnim.value),
+                    blurRadius: 40,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on_rounded, size: 14, color: _textSub),
+                      const SizedBox(width: 4),
+                      Text(
+                        '5 VILLES SUIVIES',
+                        style: GoogleFonts.poppins(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 2,
+                          color: _textSub,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: [_accent, _accentPurple],
+                    ).createShader(bounds),
+                    child: const Icon(
+                      Icons.wb_sunny_rounded,
+                      size: 84,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Météo en direct',
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w700,
+                      color: _textMain,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: miniIcons
+                        .map((i) => Icon(i, size: 18, color: _textSub.withOpacity(0.7)))
+                        .toList(),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 24),
+        navigationButton(
+          'LANCER L\'EXPÉRIENCE',
+          LoaderScreen(),
+          animation: _btnGlow,
+        ),
+      ],
     );
   }
 }

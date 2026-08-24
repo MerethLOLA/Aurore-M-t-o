@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 
 class CityWeather {
   final String city;
@@ -5,27 +6,13 @@ class CityWeather {
   final String condition;
   final double tempMax;
   final double tempMin;
-  final String temps;
-  final String icon;
-  final double lat;
-  final double lon;
   final double feelLike;
-  final double visibility;
   final double pressure;
   final double windSpeed;
   final int humidity;
-  final int sunrise;
-  final int sunset;
-
-  int? sunriseHour;
-  int? sunriseMinute;
-  int? sunsetHour;
-  int? sunsetMinute;
-
-  String fullSunriseHour="";
-  String fullSunsetHour="";
-
-  String get iconUrl => "https://openweathermap.org/img/wn/$icon@2x.png";
+  final double lat;
+  final double lon;
+  final IconData weatherIcon;
 
   CityWeather({
     required this.city,
@@ -33,48 +20,67 @@ class CityWeather {
     required this.condition,
     required this.tempMax,
     required this.tempMin,
-    required this.temps,
-    required this.icon,
-    required this.lat,
-    required this.lon,
     required this.feelLike,
-    required this.visibility,
     required this.pressure,
     required this.windSpeed,
     required this.humidity,
-    required this.sunrise,
-    required this.sunset,
-  }){
-   sunriseHour =  DateTime.fromMillisecondsSinceEpoch(sunrise*1000).hour;
-   sunsetHour =  DateTime.fromMillisecondsSinceEpoch(sunset*1000).hour;
-   sunriseMinute = DateTime.fromMillisecondsSinceEpoch(sunrise*1000).minute;
-   sunsetMinute = DateTime.fromMillisecondsSinceEpoch(sunset*1000).minute;
+    required this.lat,
+    required this.lon,
+    required this.weatherIcon,
+  });
 
-   fullSunriseHour = "$sunriseHour:$sunriseMinute";
-   fullSunsetHour = "$sunsetHour:$sunsetMinute";
+  /// Construit un CityWeather à partir de la réponse de l'API Open-Meteo
+  /// (https://open-meteo.com/), qui ne nécessite pas de clé API.
+  factory CityWeather.fromOpenMeteo(String city, Map<String, dynamic> json) {
+    final current = json['current'] as Map<String, dynamic>;
+    final daily = json['daily'] as Map<String, dynamic>;
+    final code = (current['weather_code'] as num).toInt();
 
-  }
-
-  factory CityWeather.
-  fromJson(String city, Map<String, dynamic> json) {
     return CityWeather(
       city: city,
-      temperature: (json['main']['temp'] as num).toDouble(),
-      condition: json['weather'][0]['description'],
-      tempMax: (json['main']['temp_max'] as num).toDouble(),
-      tempMin: (json['main']['temp_min'] as num).toDouble(),
-      feelLike: (json['main']['feels_like'] as num).toDouble(),
-      pressure: (json['main']['pressure'] as num).toDouble(),
-      visibility: (json['visibility'] as num).toDouble(),
-      windSpeed: (json['wind']['speed'] as num).toDouble(),
-      temps: json['weather'][0]['main'],
-      icon: json['weather'][0]['icon'],
-      lat: json['coord']['lat'],
-      lon: json['coord']['lon'],
-      humidity: json['main']['humidity'],
-      sunrise: json['sys']['sunrise'],
-      sunset: json['sys']['sunset'],
+      temperature: (current['temperature_2m'] as num).toDouble(),
+      feelLike: (current['apparent_temperature'] as num).toDouble(),
+      humidity: (current['relative_humidity_2m'] as num).round(),
+      pressure: (current['pressure_msl'] as num).toDouble(),
+      windSpeed: (current['wind_speed_10m'] as num).toDouble(),
+      condition: _conditionLabel(code),
+      weatherIcon: _conditionIcon(code),
+      lat: (json['latitude'] as num).toDouble(),
+      lon: (json['longitude'] as num).toDouble(),
+      tempMax: (daily['temperature_2m_max'][0] as num).toDouble(),
+      tempMin: (daily['temperature_2m_min'][0] as num).toDouble(),
     );
   }
 
+  // Codes météo WMO utilisés par Open-Meteo :
+  // https://open-meteo.com/en/docs#weathervariables
+  static String _conditionLabel(int code) {
+    if (code == 0) return 'Ciel dégagé';
+    if (code <= 2) return 'Peu nuageux';
+    if (code == 3) return 'Couvert';
+    if (code == 45 || code == 48) return 'Brouillard';
+    if (code >= 51 && code <= 57) return 'Bruine';
+    if (code >= 61 && code <= 67) return 'Pluie';
+    if (code >= 71 && code <= 77) return 'Neige';
+    if (code >= 80 && code <= 82) return 'Averses';
+    if (code == 85 || code == 86) return 'Averses de neige';
+    if (code >= 95) return 'Orage';
+    return 'Variable';
+  }
+
+  static IconData _conditionIcon(int code) {
+    if (code == 0) return Icons.wb_sunny_rounded;
+    if (code <= 2) return Icons.wb_cloudy_rounded;
+    if (code == 3) return Icons.cloud_rounded;
+    if (code == 45 || code == 48) return Icons.cloud_queue_rounded;
+    if (code >= 51 && code <= 57) return Icons.grain_rounded;
+    if (code >= 61 && code <= 67 || code >= 80 && code <= 82) {
+      return Icons.water_drop_rounded;
+    }
+    if (code >= 71 && code <= 77 || code == 85 || code == 86) {
+      return Icons.ac_unit_rounded;
+    }
+    if (code >= 95) return Icons.thunderstorm_rounded;
+    return Icons.cloud_rounded;
+  }
 }

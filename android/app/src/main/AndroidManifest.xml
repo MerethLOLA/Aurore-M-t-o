@@ -5,7 +5,7 @@
     <application
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
-        android:label="meteo"
+        android:label="Aurore Météo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

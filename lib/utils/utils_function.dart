@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:meteo/screens/home_screen.dart';
 
@@ -16,7 +15,8 @@ class UtilsFunction {
   }
 
   static void redirectAfterDelay(BuildContext context, Widget destination) {
-    Future.delayed(Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!context.mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => destination),

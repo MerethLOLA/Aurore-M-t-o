@@ -4,9 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 import '../utils/utils_function.dart';
 
-Widget navigationButton(String label, Widget destination, {Animation<double>? animation , Color mainColor = AppColors.neonBlue, Color secondColor = AppColors.neonPurple, IconData icon=Icons.arrow_forward}) {
-
-  final anim = animation ?? AlwaysStoppedAnimation(1.0);
+Widget navigationButton(
+  String label,
+  Widget destination, {
+  Animation<double>? animation,
+  Color mainColor = AppColors.neonBlue,
+  Color secondColor = AppColors.neonPurple,
+  IconData icon = Icons.arrow_forward,
+}) {
+  final anim = animation ?? const AlwaysStoppedAnimation(1.0);
 
   return AnimatedBuilder(
     animation: anim,
@@ -20,8 +26,8 @@ Widget navigationButton(String label, Widget destination, {Animation<double>? an
             borderRadius: BorderRadius.circular(24),
             gradient: LinearGradient(
               colors: [
-                mainColor.withOpacity( 0.12),
-                secondColor.withOpacity( 0.12 ),
+                mainColor.withOpacity(0.12),
+                secondColor.withOpacity(0.12),
               ],
             ),
             border: Border.all(
@@ -30,11 +36,9 @@ Widget navigationButton(String label, Widget destination, {Animation<double>? an
             ),
             boxShadow: [
               BoxShadow(
-                color: mainColor.withOpacity(
-                  ( 0.3 ) * anim.value,
-                ),
+                color: mainColor.withOpacity(0.3 * anim.value),
                 blurRadius: 25,
-                spreadRadius:  2 ,
+                spreadRadius: 2,
               ),
             ],
           ),

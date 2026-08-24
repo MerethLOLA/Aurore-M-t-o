@@ -1,32 +1,28 @@
-# WeatherVerse
+# Aurore Météo
 
-Examen de Développement Mobile — L3GL ISI 2026
-
----
-
-## 👥 Auteurs
-
-| # | Nom & Prénom                  |
-|---|-------------------------------|
-| 1 | **LOLA SEMERETH Rebecca**     |
-| 2 | **Arielle GANGUIA Shekina**   |
-
-> *Étudiants en Licence 3 Génie Logiciel — ISI 2026*
+Examen de Développement Mobile — L3IAGE ISI 2026
 
 ---
 
-## 📱 Présentation
+## Auteurs
 
-WeatherVerse est une application météo développée avec **Flutter**. Elle récupère en temps réel les données de 5 villes via l'API OpenWeatherMap, affiche une jauge de progression animée pendant le chargement, puis présente les résultats dans une liste interactive avec accès à une carte de localisation pour chaque ville.
+1 LOLA SEMERETH Rebecca
+2 Arielle GANGUIA Shekina
+
+---
+
+## Présentation
+
+Aurore Météo est une application météo développée avec **Flutter**. Elle récupère en temps réel les données de 5 villes via l'API [Open-Meteo](https://open-meteo.com/) (gratuite, sans clé API), affiche une jauge de progression animée pendant le chargement, puis présente les résultats dans une liste interactive avec accès à une carte de localisation pour chaque ville.
 
 L'interface adopte une identité visuelle inspirée du ciel : bleu, nuages et soleil en mode clair, ciel étoilé en mode sombre.
 
 ---
 
-## 🚀 Fonctionnalités
+## Fonctionnalités
 
 **Écran d'accueil**
-- Message d'accueil animé (BLOBI, l'assistant de l'app)
+- Message d'accueil animé
 - Bouton pour lancer l'expérience
 
 **Chargement des données**
@@ -46,17 +42,15 @@ L'interface adopte une identité visuelle inspirée du ciel : bleu, nuages et so
 
 ---
 
-## 🛠️ Stack technique
+## Stack technique
 
 | Technologie | Usage |
 |-------------|-------|
 | **Flutter / Dart** | Framework et langage principal |
-| **http** | Appels à l'API OpenWeatherMap |
+| **http** | Appels à l'API Open-Meteo |
 | **provider** | Gestion d'état (thème clair/sombre) |
 | **flutter_map** + **latlong2** | Carte interactive de localisation des villes |
 | **google_fonts** | Typographies Playfair Display & Poppins |
-| **flutter_dotenv** | Chargement de la clé API depuis `.env` |
-| **model_viewer_plus** | *(dépendance présente, non utilisée actuellement)* |
 
 ---
 
@@ -81,11 +75,7 @@ Palette inspirée du ciel — bleu, blanc nuage et or soleil en mode clair, noir
    ```bash
    flutter pub get
    ```
-2. Créer un fichier `.env` à la racine du projet (voir `.env.example`) avec votre clé API [OpenWeatherMap](https://openweathermap.org/api) :
-   ```
-   API_TOKEN=votre_cle_api_openweathermap
-   ```
-3. Lancer l'application :
+2. Lancer l'application (aucune clé API à configurer, Open-Meteo est libre d'accès) :
    ```bash
    flutter run
    ```
@@ -108,4 +98,4 @@ lib/
 
 ## 📄 Licence
 
-Projet réalisé dans un cadre académique — ISI L3GL 2026. Tous droits réservés aux auteurs.
+Projet réalisé dans un cadre académique — ISI L3IAGE 2026. Tous droits réservés aux auteurs.
