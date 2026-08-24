@@ -1,25 +1,25 @@
-# Aurore Météo
+Aurore Météo
 
-Examen de Développement Mobile — L3IAGE ISI 2026
+Examen de Développement Mobile  L3IAGE ISI 2026
 
----
 
-## Auteurs
+
+Auteurs
 
 1 LOLA SEMERETH Rebecca
-2 GANGUIA Arielle SChekina
+2 GANGUIA Arielle Schekina
 
----
 
-## Présentation
+
+Présentation
 
 Aurore Météo est une application météo développée avec **Flutter**. Elle récupère en temps réel les données de 5 villes via l'API [Open-Meteo](https://open-meteo.com/) (gratuite, sans clé API), affiche une jauge de progression animée pendant le chargement, puis présente les résultats dans une liste interactive avec accès à une carte de localisation pour chaque ville.
 
 L'interface adopte une identité visuelle inspirée du ciel : bleu, nuages et soleil en mode clair, ciel étoilé en mode sombre.
 
----
 
-## Fonctionnalités
+
+Fonctionnalités
 
 **Écran d'accueil**
 - Message d'accueil animé
@@ -40,9 +40,9 @@ L'interface adopte une identité visuelle inspirée du ciel : bleu, nuages et so
 - Mode clair et mode sombre, chacun avec son propre habillage visuel (fond photo, palette de couleurs, typographie)
 - Bascule accessible directement depuis l'écran d'accueil
 
----
 
-## Stack technique
+
+Stack technique
 
 | Technologie | Usage |
 |-------------|-------|
@@ -52,24 +52,24 @@ L'interface adopte une identité visuelle inspirée du ciel : bleu, nuages et so
 | **flutter_map** + **latlong2** | Carte interactive de localisation des villes |
 | **google_fonts** | Typographies Playfair Display & Poppins |
 
----
 
-## 🎨 Design
 
-Palette inspirée du ciel — bleu, blanc nuage et or soleil en mode clair, noir étoilé en mode sombre.
+Design
+
+Palette inspirée du ciel  bleu, blanc nuage et or soleil en mode clair, noir étoilé en mode sombre.
 
 | Token | Couleur | Usage |
 |-------|---------|-------|
-| `neonBlue` | `#4FA8FF` | Bleu ciel — accent principal |
-| `neonGreen` | `#FFC94D` | Or soleil — indicateurs positifs |
-| `neonPurple` | `#FF9F6B` | Corail crépuscule — accent secondaire |
+| `neonBlue` | `#4FA8FF` | Bleu ciel  accent principal |
+| `neonGreen` | `#FFC94D` | Or soleil  indicateurs positifs |
+| `neonPurple` | `#FF9F6B` | Corail crépuscule  accent secondaire |
 | `darkNavy` | `#06070C` | Fond principal (mode sombre) |
 | `darkPurple` | `#16161F` | Fond secondaire (mode sombre) |
 | `lightSky` | `#EAF4FF` | Fond principal (mode clair) |
 
----
 
-## ⚙️ Installation
+
+Installation
 
 1. Cloner le dépôt puis installer les dépendances :
    ```bash
@@ -80,9 +80,9 @@ Palette inspirée du ciel — bleu, blanc nuage et or soleil en mode clair, noir
    flutter run
    ```
 
----
 
-## 📁 Structure du projet
+
+##  Structure du projet
 
 ```
 lib/
@@ -94,8 +94,8 @@ lib/
 └── utils/            # Fonctions utilitaires et constantes
 ```
 
----
 
-## 📄 Licence
 
-Projet réalisé dans un cadre académique — ISI L3IAGE 2026. Tous droits réservés aux auteurs.
+##  Licence
+
+Projet réalisé dans un cadre académique  ISI L3IAGE 2026. Tous droits réservés aux auteurs.
