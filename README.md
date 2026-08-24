@@ -7,7 +7,7 @@ Examen de Développement Mobile — L3IAGE ISI 2026
 ## Auteurs
 
 1 LOLA SEMERETH Rebecca
-2 Arielle GANGUIA Shekina
+2 GANGUIA Arielle SChekina
 
 ---
 
